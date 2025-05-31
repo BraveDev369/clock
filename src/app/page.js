@@ -1,28 +1,27 @@
-import React, { useEffect } from "react";
+"use client";
 
-export default function page() {
+import React, { useEffect, useState } from "react";
+
+import "./globals.css";
+
+export default function Page() {
+  const [timeState, setTimeState] = useState("");
+
   useEffect(() => {
-    const now = new Date();
-
-    var hour = now.getHours();
-    var minutes = now.getMinutes();
-    var second = now.getSeconds();
-
-    setInterval(() => {
-      second++;
-      if (second === 60) {
-        minutes++;
-        second = 0;
-        if (minutes === 60) {
-          minutes = 0;
-          hour++;
-          if (hour === 24) {
-            hour = 0;
-          }
-        }
-      }
-      console.log(hour + ":" + minutes + ":" + second);
+    const interval = setInterval(() => {
+      const now = new Date();
+      const hour = String(now.getHours()).padStart(2, "0");
+      const minutes = String(now.getMinutes()).padStart(2, "0");
+      const seconds = String(now.getSeconds()).padStart(2, "0");
+      setTimeState(`${hour}:${minutes}:${seconds}`);
     }, 1000);
+
+    return () => clearInterval(interval); // cleanup!
   }, []);
-  return <div>page</div>;
+
+  return (
+    <div className="digitalNumber h-screen flex justify-center text-9xl pt-8">
+      {timeState}
+    </div>
+  );
 }
